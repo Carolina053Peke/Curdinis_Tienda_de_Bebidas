@@ -1486,3 +1486,34 @@ textarea {
   max-height: 60vh;
   overflow-y: auto;
 }
+
+.cart-img {
+  width: 60px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .shopping-cart-container .products-container .box-container .box {
+    flex-direction: column;
+    align-items: center; /* ✅ centra todo horizontalmente */
+    text-align: center;
+  }
+
+  .shopping-cart-container .products-container .box-container .box img {
+    align-self: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .shopping-cart-container .products-container .box-container .box .content {
+    align-items: center;
+  }
+
+  .shopping-cart-container .products-container .box-container .box .content h3,
+  .shopping-cart-container .products-container .box-container .box .content .quantity-control,
+  .shopping-cart-container .products-container .box-container .box .content .price {
+    margin: 0.3rem 0;
+  }
+}

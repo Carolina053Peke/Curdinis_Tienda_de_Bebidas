@@ -158,8 +158,10 @@ window.onload = function () {
       id: producto.id,
       name: producto.name,
       price: Number(producto.price),
-      quantity: 1   // 👈 Usamos `quantity`, como espera `Cart`
+      quantity: 1,
+      image: producto.image  // ✅ esto es lo que faltaba
     };
+
 
     carrito.addToCart(selected);
     cartLoad();             // 🛒 Actualiza los items del carrito
@@ -260,7 +262,7 @@ function cartLoad() {
 
       div.innerHTML = `
         <i class="fas fa-times" onclick="removeItem(${index})"></i>
-        <img src="image/menu-1.png" alt="">
+        <img src="image/${element.image}" alt="${element.name}" class="cart-img">
         <div class="content">
           <h3>${element.name}</h3>
           <div class="quantity-control">
