@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Genki Sushi</title>
+    <title>CURDINIS - Tienda de bebidas</title>
 
     <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -24,21 +24,23 @@
 
     <header class="header">
 
-        <a href="#" class="logo">GENK<span>KI SU</span>SHI </a>
+        <a href="#" class="logo">CUR<span>DI</span>NIS</a>
 
         <nav class="navbar">
-            <a href="#home">Home</a>
-            <a href="#popular">Menu</a>
-            <a href="#menu">Ofertas</a>
+            <a href="index.html">Home</a>
+            <a href="index.html">Menu</a>
+            <a href="#popular">Ofertas</a>
             <a href="#about">Nosotros</a>
-            <a href="#order">Contacto</a>
+            <a href="#contacto">Contacto</a>
         </nav>
 
-        <div class="icons">
-            <div id="menu-btn" class="fas fa-bars"></div>
-            <div id="cart-btn" class="fas fa-shopping-cart"></div>
+    <div class="icons">
+        <div id="menu-btn" class="fas fa-bars"></div>
+        <div id="cart-btn" class="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-count" class="cart-count">0</span>
         </div>
-
+    </div>
     </header>
 
     <!-- header section ends  -->
@@ -81,9 +83,9 @@
     <section class="home" id="home">
 
         <div class="content">
-            <span>Bienvenido a Genki Sushi</span>
-            <h3>Diferentes sabores para los diferenetes gustos 😋</h3>
-            <p>Tenemos una gran variedad en tablas de sushi y ensaladas</p>
+            <span>Bienvenido a CURDINIS - Tienda de Bebidas</span>
+            <h3>Una bebida para cada ocasión 🥂</h3>
+            <p>Descubrí cervezas artesanales, aperitivos, vinos exclusivos y bebidas sin alcohol. ¡Elegí tu favorita!</p>
             <a href="#popular" class="btn">Comprar</a>
         </div>
 
@@ -151,11 +153,9 @@
 
         <section class="category" id="categories">
             <div class="box">
-                <img src="image/cat-2.png" alt="">
+                <img src="image/cat-0.png" alt="">
                 <h3>Todos</h3>
             </div>
-
-
         </section>
 
         <!-- category section ends -->
@@ -179,11 +179,10 @@
         </div>
 
         <div class="content">
-            <span>porque elegirnos?</span>
-            <h3 class="title">hacemos cosas deliciosas!</h3>
-            <p>Somos un restaurant de comida japonesa especializada en el sushi, brindando lo mas fresco, rico y de
-                calidad en cada roll para nuestros amantes del sushi.</p>
-            <a href="#" class="btn">mas info</a>
+        <span>¿por qué elegirnos?</span>
+        <h3 class="title">hacemos que cada momento cuente 🥂</h3>
+        <p>Somos una tienda especializada en bebidas. Ofrecemos cervezas, vinos, licores y gaseosas para cada ocasión, con entregas rápidas y atención de calidad.</p>
+        <a href="#popular" class="btn">ver catálogo</a>
             <div class="icons-container">
                 <div class="icons">
                     <img src="image/serv-1.png" alt="">
@@ -191,7 +190,7 @@
                 </div>
                 <div class="icons">
                     <img src="image/serv-2.png" alt="">
-                    <h3>ingredientes frescos</h3>
+                    <h3>Productos de primera linea</h3>
                 </div>
                 <div class="icons">
                     <img src="image/serv-3.png" alt="">
@@ -221,56 +220,58 @@
             </div>
 
             <div class="icons">
+                <a href="https://wa.me/541141755248?text=Hola%20CURDINIS%2C%20quiero%20hacer%20un%20pedido" target="_blank">
                 <img src="image/icon-2.png" alt="">
-                <h3>11-5108-9251</h3>
+            </a>
+                <h3>+54-11-4175-5248</h3>
             </div>
+
 
             <div class="icons">
                 <img src="image/icon-3.png" alt="">
-                <h3>Ezeiza - Canning - Monte Grande - El Jaguel - T. Suarez</h3>
+                <h3>Av. Brasil 3073, Parque Patricios</h3>
             </div>
 
         </div>
 
-        <form action="" id="contact-form">
+    <section class="order" id="contacto">
+    <form onsubmit="enviarPorWhatsApp(event)">
+        <h3 class="form-title">Hacenos tu consulta por WhatsApp</h3>
 
-            <div class="flex">
-                <div class="inputBox">
-                    <span>Nombre</span>
-                    <input class="data" type="text" placeholder="nombre y apellido" name="name" id="">
-                </div>
-                <div class="inputBox">
-                    <span>Telefono</span>
-                    <input class="data" type="phone" placeholder="tu telefono" name="phone" id="">
-                </div>
-            </div>
+        <div class="flex">
+        <div class="inputBox">
+            <span>Nombre</span>
+            <input type="text" placeholder="nombre y apellido" id="nombre" required>
+        </div>
+        <div class="inputBox">
+            <span>Teléfono</span>
+            <input type="tel" placeholder="tu teléfono" id="telefono" required>
+        </div>
+        </div>
 
-            <div class="flex">
-                <div class="inputBox">
-                    <span>email</span>
-                    <input class="data" type="email" placeholder="tu correo" name="email" id="">
-                </div>
-                <div class="inputBox">
-                    <span>Domicilio</span>
-                    <input class="data" type="text" placeholder="tu domicilio" name="address" id="">
-                </div>
-            </div>
+        <div class="inputBox">
+        <span>Domicilio</span>
+        <input type="text" placeholder="tu domicilio" id="direccion">
+        </div>
 
-            <div class="flex">
-                <div class="inputBox">
-                    <textarea class="data" placeholder="tu mensaje" id="" cols="30" rows="10" name="message"></textarea>
-                </div>
-                <div class="inputBox">
-                    <iframe class="map" src="https://maps.google.com/maps?q=Ezeiza&t=&z=11&ie=UTF8&iwloc=&output=embed"
-                        allowfullscreen="" loading="lazy"></iframe>
-                </div>
-            </div>
+        <div class="flex">
+        <div class="inputBox textarea-group">
+            <span>Mensaje</span>
+            <textarea placeholder="Dejanos el mensaje de tu pedido" id="mensaje" required></textarea>
 
-            <input type="submit" value="Enviar" class="btn" id="send-form">
-
-        </form>
-
+            <button type="submit" class="btn">Enviar por WhatsApp</button>
+        </div>
+        <div class="inputBox">
+            <span>Ubicación</span>
+            <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13131.28687754843!2d-58.4257981243211!3d-34.63394531030138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccb05427e78c9%3A0xec50b00e214401d3!2sBrasil%203073%2C%20C1260AAM%20Cdad.%20Aut%C3%B3noma%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1748756396110!5m2!1ses-419!2sar"
+            width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" class="map"></iframe>
+        </div>
+        </div>
+    </form>
     </section>
+
 
     <!-- order section ends -->
 
@@ -281,11 +282,11 @@
         <div class="bottom">
 
             <div class="share">
-                <a href="https://www.facebook.com/genkisushiAR" class="fab fa-facebook-f" target="_new"></a>
-                <a href="https://www.instagram.com/genkisushiar/" class="fab fa-instagram" target="_new"></a>
+                <a href="https://www.facebook.com/loscurdinis" class="fab fa-facebook-f" target="_new"></a>
+                <a href="https://www.instagram.com/loscurdinis/" class="fab fa-instagram" target="_new"></a>
             </div>
 
-            <div class="credit"> <span>Genki Sushi 2021</span> | todos los derechos reservados. </div>
+            <div class="credit"> <span>CURDINIS - 2025</span> | todos los derechos reservados. </div>
 
         </div>
 
@@ -296,6 +297,7 @@
 
     <!-- custom js file link  -->
     <script src="js/script.js"></script>
+    <script src="js/test-cart.js"></script>
 
 </body>
 

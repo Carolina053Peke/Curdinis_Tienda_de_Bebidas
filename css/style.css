@@ -242,10 +242,8 @@ section {
 }
 
 .shopping-cart-container .products-container .box-container {
-  display: -ms-grid;
   display: grid;
-  -ms-grid-columns: (minmax(30rem, 1fr))[auto-fit];
-      grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
   gap: 1.5rem;
   padding: 1.5rem;
 }
@@ -279,7 +277,10 @@ section {
 }
 
 .shopping-cart-container .products-container .box-container .box img {
-  height: 8rem;
+  height: 5rem;
+  width: auto;
+  object-fit: contain;
+  border-radius: 0.5rem;
 }
 
 .shopping-cart-container .products-container .box-container .box .content h3 {
@@ -458,8 +459,8 @@ section {
 }
 
 .home .image .home-img {
-  width: 100%;
-  margin-top: 5rem;
+  width: 23%;
+  margin-top: 1rem;
 }
 
 .home .home-parallax-img {
@@ -649,7 +650,8 @@ section {
   text-decoration: line-through;
 }
 
-.banner .row-banner {
+/* .row-banner */
+.banner  {
   background: url(../image/row-banner.png) no-repeat;
   height: 45rem;
   background-size: cover;
@@ -695,7 +697,7 @@ section {
   position: relative;
   border-radius: 1rem;
   overflow: hidden;
-  height: 45rem;
+  height: 35rem;
 }
 
 .banner .grid-banner .grid:hover img {
@@ -784,6 +786,29 @@ section {
   color: #2793ae;
 }
 
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.btn-qty {
+  background-color: #01b27a;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.8rem;
+  font-size: 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-qty:hover {
+  background-color: #019d6a;
+}
+
+
 .order .icons-container {
   display: -ms-grid;
   display: grid;
@@ -810,64 +835,121 @@ section {
   margin-top: .5rem;
 }
 
+form {
+  background: #f9f9f9;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 1000px;
+  margin: auto;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.inputBox {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputBox span {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.inputBox input,
+.inputBox textarea {
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  resize: none;
+}
+
+.inputBox input:focus,
+.inputBox textarea:focus {
+  outline: none;
+  border-color: #01b27a;
+  box-shadow: 0 0 0 2px rgba(1, 178, 122, 0.2);
+}
+
+textarea {
+  min-height: 150px;
+}
+
+.btn {
+  background-color: #01b27a;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin-top: 1rem;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #019d6a;
+}
+
+
+
 .order form {
   background: #f7f7f7;
   padding: 2rem;
   border-radius: .5rem;
 }
 
+.form-title {
+  font-size: 3.5rem;
+  color: #130f40;
+  padding-bottom: 1rem;
+}
+
 .order form .flex {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
 }
 
 .order form .flex .inputBox {
-  width: 49%;
-  padding: .7rem 0;
+  flex: 1 1 48%;
+  display: flex;
+  flex-direction: column;
 }
 
-.order form .flex span {
-  font-size: 1.7rem;
-  color: #666;
-}
-
-.order form .flex input, .order form .flex textarea {
-  width: 100%;
-  margin-top: .5rem;
-  padding: 1rem 1.2rem;
-  width: 100%;
-  border-radius: .5rem;
-  font-size: 1.6rem;
-  text-transform: none;
-  color: #130f40;
-}
-
-.order form .flex textarea {
-  height: 20rem;
+.order form .flex .inputBox textarea {
+  min-height: 150px;
   resize: none;
 }
 
-.order form .flex .map {
-  height: 100%;
-  width: 100%;
-  border-radius: .5rem;
+.order form .btn {
+  width: fit-content;
+  margin-right: auto;
+  margin-right: 0;
+  background-color: #01b27a;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.1rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-#form-success {
-  display: inline;
-  color: green;
-  border: olivedrab solid 1px;
-  margin-left: 5px;
-  padding: 3px;
-  font-size: 1.2rem;
-  font-weight: bold;
+.order form .btn:hover {
+  background-color: #019d6a;
 }
+
 
 .blogs .box-container {
   display: -ms-grid;
@@ -1079,6 +1161,19 @@ section {
   color: #2793ae;
 }
 
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .order form .flex .inputBox {
+    flex: 1 1 100%;
+  }
+
+  .order form .btn {
+    margin: 1rem auto 0;
+    display: block;
+  }
+}
+
 @media (max-width: 991px) {
   html {
     font-size: 55%;
@@ -1120,9 +1215,6 @@ section {
     right: 0;
     width: 130%;
   }
-  .order form .flex .inputBox {
-    width: 100%;
-  }
 }
 
 @media (max-width: 450px) {
@@ -1143,3 +1235,254 @@ section {
   }
 }
 /*# sourceMappingURL=style.css.map */
+
+/* FORMULARIO DE CONTACTO */
+
+.order form {
+  background: #f7f7f7;
+  padding: 2rem;
+  border-radius: .5rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* Título destacado */
+.order form .form-title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #130f40;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Layout principal */
+.order form .flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+/* Contenedores de campos */
+.order form .flex .inputBox {
+  flex: 1 1 48%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Campo de domicilio ocupa toda la línea */
+.order form .inputBox {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.order form .inputBox span {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.order form input,
+.order form textarea {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: .5rem;
+  font-size: 1rem;
+  resize: none;
+}
+
+/* Botón debajo del textarea */
+.order form .textarea-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.order form .textarea-group .btn {
+  margin-top: 1.5rem;
+  align-self: flex-start;
+}
+
+/* Estilo general del botón */
+.order form .btn {
+  background-color: #01b27a;
+  color: white;
+  border: none;
+  padding: 0.9rem 2.9rem;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.order form .btn:hover {
+  background-color: #019d6a;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .order form .flex {
+    flex-direction: column;
+  }
+
+  .order form .flex .inputBox,
+  .order form .textarea-group {
+    width: 100%;
+  }
+
+  .order form .textarea-group .btn {
+    align-self: center;
+  }
+}
+
+/* Ajuste para que textarea y mapa se vean parejos */
+.order form .flex.double {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.order form .flex.double .inputBox {
+  flex: 1 1 48%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Por si hay conflicto previo, forzamos que ambos se comporten igual */
+.order form .flex.double .inputBox textarea,
+.order form .flex.double .inputBox iframe {
+  width: 100%;
+  height: 250px;
+  resize: none;
+  border-radius: .5rem;
+}
+
+/* Responsive para mobile */
+@media (max-width: 768px) {
+  .order form .flex.double {
+    flex-direction: column;
+  }
+
+  .order form .flex.double .inputBox {
+    width: 100%;
+  }
+}
+
+.cart-icon {
+  position: relative;
+  height: 4.5rem;
+  width: 4.5rem;
+  line-height: 4.5rem;
+  font-size: 2rem;
+  background: #f7f7f7;
+  color: #130f40;
+  border-radius: 0.5rem;
+  margin-left: 0.3rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.cart-icon:hover {
+  color: #fff;
+  background: #2793ae;
+}
+
+.cart-count {
+  position: absolute;
+  top: -0.6rem;
+  right: -0.6rem;
+  background-color: red;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  height: 1.8rem;
+  width: 1.8rem;
+  line-height: 1.8rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-icon {
+  position: relative;
+  height: 4.5rem;
+  width: 4.5rem;
+  line-height: 4.5rem;
+  font-size: 2rem;
+  background: #f7f7f7;
+  color: #130f40;
+  border-radius: .5rem;
+  margin-left: .3rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.cart-icon:hover {
+  background: #2793ae;
+  color: #fff;
+}
+
+.cart-icon .cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: red;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+
+@media (max-width: 768px) {
+  .shopping-cart-container .products-container {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .shopping-cart-container .products-container .box-container {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .shopping-cart-container .products-container .box-container .box {
+    flex-direction: column;
+    max-width: 100%;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .header .icons {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .cart-icon {
+    position: relative;
+    background-color: #f7f7f7;
+  }
+
+  .cart-icon .cart-count {
+    top: -5px;
+    right: -5px;
+    font-size: 1rem;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+}
+
+.shopping-cart-container .products-container {
+  max-height: 60vh;
+  overflow-y: auto;
+}

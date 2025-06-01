@@ -1,10 +1,12 @@
 // Carga de JSON Productos
 let data = [];
-$.getJSON("/data/productos.json", (datos) => {
-  datos.forEach((element) => {
-    data.push(element);
+$.getJSON("/data/productos.json")
+  .done((datos) => {
+    data = datos;
+  })
+  .fail((err) => {
+    console.error("Error al cargar productos.json", err);
   });
-});
 
 // Definición Clase para carrito y sus metodos
 class Cart {
@@ -24,21 +26,18 @@ class Cart {
     })();
   }
   addToCart(item) {
-    if (
-      this.items.length == 0 &&
-      sessionStorage.getItem(this.cartName).length > 2
-    ) {
-      let cartItems = sessionStorage.getItem(this.cartName);
-      let cartObj = JSON.parse(cartItems);
-      this.items.push(cartObj);
-      this.items.push(item);
-      let jsonStr = JSON.stringify(this.items);
-      sessionStorage.setItem(this.cartName, jsonStr);
+    let existingItems = JSON.parse(sessionStorage.getItem(this.cartName)) || [];
+
+    let found = existingItems.find((prod) => prod.id === item.id);
+    if (found) {
+      found.quantity = (found.quantity || 1) + 1;
     } else {
-      this.items.push(item);
-      let jsonStr = JSON.stringify(this.items);
-      sessionStorage.setItem(this.cartName, jsonStr);
+      item.quantity = 1;
+      existingItems.push(item);
     }
+
+    this.items = existingItems;
+    sessionStorage.setItem(this.cartName, JSON.stringify(this.items));
   }
   removeItem(id) {
     let cartItems = "";
@@ -61,25 +60,20 @@ class Cart {
     }
   }
   calculateCart() {
-    if (sessionStorage.getItem(this.cartName).length > 2) {
-      let cartItems = sessionStorage.getItem(this.cartName);
-      let cartObj = JSON.parse(cartItems);
-      this.items = cartObj;
+    const cartItems = JSON.parse(sessionStorage.getItem(this.cartName)) || [];
+    this.items = cartItems;
 
-      let preTotal = 0;
-      if (this.items.length > 0) {
-        for (let i = 0, _len = this.items.length; i < _len; i++) {
-          preTotal += this.items[i].price * this.items[i].qty;
-        }
-        this.subtotal = preTotal;
-        this.IVA = preTotal * 0.21;
-        this.total = preTotal + preTotal * 0.21;
-      }
-    } else {
-        this.subtotal = 0;
-        this.IVA = 0;
-        this.total = 0;
-    }
+    let preTotal = 0;
+
+    this.items.forEach(item => {
+      const quantity = item.quantity || 1;
+      const price = parseFloat(item.price) || 0;
+      preTotal += price * quantity;
+    });
+
+    this.subtotal = preTotal;
+    this.IVA = parseFloat((this.subtotal * 0.21).toFixed(2));
+    this.total = parseFloat((this.subtotal + this.IVA).toFixed(2));
   }
 }
 //Inicializo el carrito
@@ -108,6 +102,13 @@ document.querySelector("#menu-btn").onclick = () => {
 window.onscroll = () => {
   navbar.classList.remove("active");
 };
+// Cerrar el carrito al hacer clic fuera de él
+document.querySelectorAll(".navbar a").forEach(link => {
+  link.addEventListener("click", () => {
+    document.querySelector(".shopping-cart-container").classList.remove("active");
+    navbar.classList.remove("active");
+  });
+});
 
 document.querySelector(".home").onmousemove = (e) => {
   let x = (window.innerWidth - e.pageX * 2) / 90;
@@ -145,13 +146,24 @@ window.onload = function () {
   $("#product-list div div.content a").on("click", function () {
     let clicked = $(this).closest(".box");
     let id = parseInt(clicked.attr("id"));
-    let selected = (({ id, name, qty = 1, price }) => ({
-      id,
-      name,
-      qty,
-      price,
-    }))(data.filter((element) => element.id == id)[0]);
+    if (isNaN(id)) return;
+
+    let producto = data.find((element) => element.id === id);
+    if (!producto) {
+      console.warn("Producto no encontrado con id:", id);
+      return;
+    }
+
+    const selected = {
+      id: producto.id,
+      name: producto.name,
+      price: Number(producto.price),
+      quantity: 1   // 👈 Usamos `quantity`, como espera `Cart`
+    };
+
     carrito.addToCart(selected);
+    cartLoad();             // 🛒 Actualiza los items del carrito
+    updateCartCount();      // 🔄 Actualiza el número en el icono
   });
 };
 
@@ -176,27 +188,20 @@ document.querySelector("#categories").onmouseover = () => {
   }
 };
 
-//Envio de Form
-$("#send-form").click((e) => {
-  e.preventDefault();
+//Envio de msj de whatsapp
+document.querySelector('#place-order').onmouseover = () => {
+  let message = "Hola! Te paso mi pedido:%0A"; // %0A es salto de línea en URL
+  const orderObj = JSON.parse(sessionStorage.getItem(carrito.cartName)) || [];
 
-  const postURL = "https://jsonplaceholder.typicode.com/posts";
-  let salida = [];
-  let formulario = document.querySelectorAll("#contact-form .data");
-
-  formulario.forEach((element) => {
-    let actual = { [element.name]: element.value };
-    salida.push(actual);
+  orderObj.forEach((element) => {
+    let cantidad = element.quantity || 1;
+    message += `• Producto: ${element.name}%0A  Cantidad: x${cantidad}%0A  Precio: $${(Number(element.price) * cantidad).toFixed(2)}%0A%0A`;
   });
 
-  $.post(postURL, salida, (res, estado) => {
-    if (estado === "success") {
-      console.log(salida);
-      console.log(res);
-      $("#contact-form").append(`<p id="form-success">Formulario Enviado!</p>`);
-    }
-  });
-});
+  let wappLink = `https://api.whatsapp.com/send?phone=541141755248&text=${message}`;
+  document.querySelector('#place-order').setAttribute('href', wappLink);
+};
+
 
 // Funcion eliminar del carrito
 $(".products-container .box-container").on(
@@ -218,43 +223,89 @@ $(".products-container .box-container").on(
   }
 );
 
-// Enviar pedido Whatsapp
 document.querySelector('#place-order').onmouseover = () => {
-    let message = "Hola! Te paso mi pedido: ";
-    orderObj = JSON.parse(sessionStorage.getItem(carrito.cartName))
-    orderObj.forEach((element) => {
-        message += ("Producto: " + element.name + " Cantidad: x10 " + "Precio: " + element.price + ". ")
-    })
-    let wappLink = `https://api.whatsapp.com/send?phone=1122334455&text=${message}`
-    document.querySelector('#place-order').setAttribute('href', wappLink)
+  let message = "Hola! Te paso mi pedido:\n\n";
+  let orderObj = JSON.parse(sessionStorage.getItem(carrito.cartName)) || [];
+
+  orderObj.forEach((element) => {
+    let qty = element.quantity || 1;
+    let subtotal = Number(element.price) * qty;
+    message += `🧃 ${element.name}\nCantidad: x${qty}\nSubtotal: $${subtotal}\n\n`;
+  });
+
+  let wappLink = `https://api.whatsapp.com/send?phone=541141755248&text=${encodeURIComponent(message)}`;
+  document.querySelector('#place-order').setAttribute('href', wappLink);
+};
+
+// Actualiza el contador del carrito al cargar la página
+function updateCartCount() {
+  const cart = JSON.parse(sessionStorage.getItem(carrito.cartName)) || [];
+  const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  document.getElementById("cart-count").innerText = totalItems;
 }
 
 // Funcion llenar carrito
 function cartLoad() {
-  if (sessionStorage.getItem(carrito.cartName).length > 0) {
-    let cartItems = sessionStorage.getItem(carrito.cartName);
-    let cartObj = JSON.parse(cartItems);
+  const container = document.querySelector(".products-container .box-container");
+  container.innerHTML = ""; // limpiamos el contenedor
 
-    cartObj.forEach((element) => {
+  const cartItems = sessionStorage.getItem(carrito.cartName);
+  if (cartItems && cartItems.length > 0) {
+    const cartObj = JSON.parse(cartItems);
+
+    cartObj.forEach((element, index) => {
+      let quantity = element.quantity || 1;
       let div = document.createElement("div");
       div.setAttribute("class", "box");
 
       div.innerHTML = `
-        <i class="fas fa-times"></i>
-        <img src="image/menu-4.png" alt="">
+        <i class="fas fa-times" onclick="removeItem(${index})"></i>
+        <img src="image/menu-1.png" alt="">
         <div class="content">
-        <h3>${element.name}</h3>
-        <span> Cantidad : x10</span>
-        <br>
-        <span> Precio : </span>
-        <span class="price"> $${element.price} </span>
+          <h3>${element.name}</h3>
+          <div class="quantity-control">
+            <button class="btn-qty" onclick="changeQuantity(${index}, -1)">−</button>
+            <span> x${quantity} </span>
+            <button class="btn-qty" onclick="changeQuantity(${index}, 1)">+</button>
+          </div>
+          <span> Precio: </span>
+        <span class="price"> $${(Number(element.price) * quantity).toFixed(2)} </span>
         </div>
-        `;
-      document
-        .querySelector(".products-container .box-container")
-        .appendChild(div);
+      `;
+
+      container.appendChild(div);
     });
+
+    // Actualiza resumen
+    renderResumen();
   }
+  updateCartCount();
+}
+
+function changeQuantity(index, delta) {
+  let cart = JSON.parse(sessionStorage.getItem(carrito.cartName));
+  cart[index].quantity = (cart[index].quantity || 1) + delta;
+
+  if (cart[index].quantity <= 0) {
+    cart.splice(index, 1);
+  }
+
+  sessionStorage.setItem(carrito.cartName, JSON.stringify(cart));
+
+  cartLoad();              // 🔁 esto refresca el carrito
+  carrito.calculateCart(); // ✅ recalcula totales
+  renderResumen();         // ✅ muestra los totales actualizados
+  updateCartCount();       // 🔁 actualiza el número del ícono carrito
+}
+
+function removeItem(index) {
+  let cart = JSON.parse(sessionStorage.getItem(carrito.cartName));
+  cart.splice(index, 1);
+  sessionStorage.setItem(carrito.cartName, JSON.stringify(cart));
+  cartLoad();             // actualiza el DOM
+  carrito.calculateCart(); // 👈 esto asegura que los totales se recalculen
+  renderResumen();         // 👈 y que se muestren correctamente
+  updateCartCount(); // 🔄 actualiza el contador del carrito
 }
 
 // Funcion recalculo resumen
@@ -295,18 +346,10 @@ function loadProducts(array) {
     div.setAttribute("id", element.id);
     div.innerHTML = `
         <div class="image">
-            <img src="image/food-${element.image}.png" alt="">
+        <img src="image/${element.image}" alt="${element.name}">
         </div>
         <div class="content">
             <h3>${element.name}</h3>
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-                <span> (x10) </span>
-            </div>
             <div class="price">$${element.price}</div>
             <a class="btn">agregar</a>
         </div>
@@ -314,3 +357,27 @@ function loadProducts(array) {
     document.getElementById("product-list").appendChild(div);
   });
 }
+
+function agregarAlCarrito(producto) {
+  if (!producto.name || !producto.price || isNaN(producto.price)) {
+    console.warn("Producto inválido:", producto);
+    return;
+  }
+
+  producto.price = Number(producto.price); // 🔁 Asegurar que el precio es número
+
+  let cart = JSON.parse(sessionStorage.getItem(carrito.cartName)) || [];
+
+  let existente = cart.find(item => item.id === producto.id);
+  if (existente) {
+    existente.quantity = (existente.quantity || 1) + 1;
+  } else {
+    producto.quantity = 1;
+    cart.push(producto);
+  }
+
+  sessionStorage.setItem(carrito.cartName, JSON.stringify(cart));
+  cartLoad();
+  updateCartCount();
+}
+

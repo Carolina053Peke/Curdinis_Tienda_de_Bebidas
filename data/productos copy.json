@@ -1,0 +1,200 @@
+[
+    {
+        "id": 1,
+        "name": "New York Phila",
+        "price": 730,
+        "category": "Clásicos",
+        "type": "Rolls",
+        "image": "1",
+        "detail": "Salmón, Queso, Palta"
+    },
+    {
+        "id": 2,
+        "name": "Philadelphia",
+        "price": 750,
+        "category": "Clásicos",
+        "type": "Rolls",
+        "image": "2",
+        "detail": "Philadelphia y Salmón"
+    },
+    {
+        "id": 3,
+        "name": "Tuna",
+        "price": 680,
+        "category": "Clásicos",
+        "type": "Rolls",
+        "image": "3",
+        "detail": "Atún, Mayonesa, Queso y Ciboulette"
+    },
+    {
+        "id": 4,
+        "name": "Buenos Aires",
+        "price": 780,
+        "category": "Clásicos",
+        "type": "Rolls",
+        "image": "4",
+        "detail": "Langostino, Palta, Queso, cubierto con Salmón"
+    },
+    {
+        "id": 5,
+        "name": "California",
+        "price": 680,
+        "category": "Clásicos",
+        "type": "Rolls",
+        "image": "5",
+        "detail": "Kanikama, Queso, Palta"
+    },
+    {
+        "id": 6,
+        "name": "Honey",
+        "price": 670,
+        "category": "Clásicos",
+        "type": "Rolls",
+        "image": "6",
+        "detail": "Salmón cocido, Miel, Jengibre"
+    },
+    {
+        "id": 7,
+        "name": "Alaska",
+        "price": 770,
+        "category": "Clásicos",
+        "type": "Rolls",
+        "image": "7",
+        "detail": "Salmón, Queso, Verdeo, Tamago y Salmón Ahumado"
+    },
+    {
+        "id": 8,
+        "name": "Salmón",
+        "price": 750,
+        "category": "Makis",
+        "type": "Makis",
+        "image": "8",
+        "detail": "Salmón"
+    },
+    {
+        "id": 9,
+        "name": "Phila",
+        "price": 760,
+        "category": "Makis",
+        "type": "Makis",
+        "image": "1",
+        "detail": "Salmón, Queso, Palta"
+    },
+    {
+        "id": 10,
+        "name": "Kani",
+        "price": 720,
+        "category": "Makis",
+        "type": "Makis",
+        "image": "2",
+        "detail": "Kanikama, Queso, Palta"
+    },
+    {
+        "id": 11,
+        "name": "Philafornia",
+        "price": 780,
+        "category": "Fritos",
+        "type": "Rolls",
+        "image": "3",
+        "detail": "Salmón, Palta, Queso, Kanikama + Salsa Dulce"
+    },
+    {
+        "id": 12,
+        "name": "Crispi",
+        "price": 850,
+        "category": "Fritos",
+        "type": "Rolls",
+        "image": "4",
+        "detail": "Salmón, Provenzal, Cheddar + Salsa (Sin Arroz)"
+    },
+    {
+        "id": 13,
+        "name": "Malvina",
+        "price": 790,
+        "category": "Fritos",
+        "type": "Rolls",
+        "image": "5",
+        "detail": "Salmón, Queso con Salsa Kani"
+    },
+    {
+        "id": 18,
+        "name": "Feel",
+        "price": 750,
+        "category": "Especiales sin Arroz",
+        "type": "Rolls",
+        "image": "2",
+        "detail": "Salmón, Queso, Verdeo envuelto en Tamago"
+    },
+    {
+        "id": 19,
+        "name": "Genki",
+        "price": 870,
+        "category": "Especiales sin Arroz",
+        "type": "Rolls",
+        "image": "3",
+        "detail": "Palmitos, Salmón envuelto en Tamago y Queso + Praliné"
+    },
+    {
+        "id": 20,
+        "name": "Tentación",
+        "price": 790,
+        "category": "Especiales sin Arroz",
+        "type": "Rolls",
+        "image": "4",
+        "detail": "Relleno de Queso, Palmitps y Salmón, envuelto en Tamago + Salsa de Maracuyá y Batata"
+    },
+    {
+        "id": 21,
+        "name": "Feel Eby",
+        "price": 760,
+        "category": "Especiales sin Arroz",
+        "type": "Rolls",
+        "image": "5",
+        "detail": "Langostinos en tempura, Verdeo, Queso envuelto en Tamago cubierto con Salsa de Mango y Batata"
+    },
+    {
+        "id": 22,
+        "name": "Teo Roll",
+        "price": 760,
+        "category": "Especiales con Arroz",
+        "type": "Rolls",
+        "image": "6",
+        "detail": "Salmón frito, Queso semi cubierto con Palta y Salsa de Frutos Rojos"
+    },
+    {
+        "id": 23,
+        "name": "Futurama",
+        "price": 750,
+        "category": "Especiales con Arroz",
+        "type": "Rolls",
+        "image": "7",
+        "detail": "Langostinos apanados fritos con Queso + Salsa Futurama"
+    },
+    {
+        "id": 24,
+        "name": "Kunsei",
+        "price": 780,
+        "category": "Especiales con Arroz",
+        "type": "Rolls",
+        "image": "8",
+        "detail": "Langostinos apanados cubierto con Salmón + Guacamole"
+    },
+    {
+        "id": 25,
+        "name": "Toro Roll",
+        "price": 760,
+        "category": "Especiales con Arroz",
+        "type": "Rolls",
+        "image": "1",
+        "detail": "Langostinos apanados, Palta, Ciboulette"
+    },
+    {
+        "id": 26,
+        "name": "Persia",
+        "price": 800,
+        "category": "Especiales con Arroz",
+        "type": "Rolls",
+        "image": "2",
+        "detail": "Salmón y Mango semi cubierto con Queso y lluvia de Praliné de Almendras"
+    }
+]
