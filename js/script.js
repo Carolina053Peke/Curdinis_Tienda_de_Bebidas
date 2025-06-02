@@ -364,19 +364,18 @@ function removeItem(index) {
 
 // Funcion recalculo resumen
 function renderResumen() {
+  // 1) Recalcular carrito
   carrito.calculateCart();
-  document.querySelector(
-    ".cart-total .box .Total span"
-  ).innerHTML = `<span>$${carrito.subtotal}</span>`;
 
-  document.querySelector("#iva span").innerHTML = `<span>$${carrito.IVA.toFixed(
-    2
-  )}</span>`;
+  // // 2) Actualizar el subtotal (clase "subtotal", en minúsculas)
+  // document.querySelector(".cart-total .box .subtotal span")
+  //   .innerText = `$${carrito.subtotal.toFixed(2)}`;
 
-  document.querySelector(
-    ".cart-total .box .total span"
-  ).innerHTML = `<span>$${carrito.total.toFixed(2)}</span>`;
+  // 3) Actualizar el total (clase "total")
+  document.querySelector(".cart-total .box .total span")
+    .innerText = `$${carrito.total.toFixed(2)}`;
 }
+
 
 // Funcion vaciar lista
 function removeChildren(params) {
