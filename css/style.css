@@ -1215,6 +1215,10 @@ textarea {
     right: 0;
     width: 130%;
   }
+  section {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
 }
 
 @media (max-width: 450px) {
@@ -1517,3 +1521,12 @@ textarea {
     margin: 0.3rem 0;
   }
 }
+
+#product-list .box {
+  margin: 1rem 1rem 2rem 1rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background-color: #f7f7f7;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+

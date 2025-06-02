@@ -26,7 +26,16 @@ class Cart {
     })();
   }
   addToCart(item) {
-    let existingItems = JSON.parse(sessionStorage.getItem(this.cartName)) || [];
+    let stored = sessionStorage.getItem(this.cartName);
+    let existingItems = [];
+
+    if (stored && stored.length > 0) {
+      try {
+        existingItems = JSON.parse(stored);
+      } catch (e) {
+        console.error("Carrito corrupto al agregar:", stored);
+      }
+    }
 
     let found = existingItems.find((prod) => prod.id === item.id);
     if (found) {
@@ -60,9 +69,18 @@ class Cart {
     }
   }
   calculateCart() {
-    const cartItems = JSON.parse(sessionStorage.getItem(this.cartName)) || [];
-    this.items = cartItems;
+    let stored = sessionStorage.getItem(this.cartName);
+    let cartItems = [];
 
+    if (stored && stored.length > 0) {
+      try {
+        cartItems = JSON.parse(stored);
+      } catch (e) {
+        console.error("Datos corruptos en el carrito:", stored);
+      }
+    }
+
+    this.items = cartItems;
     let preTotal = 0;
 
     this.items.forEach(item => {
@@ -129,21 +147,21 @@ document.querySelector(".home").onmouseleave = () => {
 window.onload = function () {
   loadProducts(data);
 
+  // Cargar categorías únicas
   let unicos = [...new Set(data.map((item) => item.category))];
 
   unicos.forEach((element, index) => {
     let div = document.createElement("div");
     div.setAttribute("class", "box");
-
     div.innerHTML = `
-            <img src="image/cat-${index + 1}.png" alt="">
-            <h3>${element}</h3>
+      <img src="image/cat-${index + 1}.png" alt="${element}">
+      <h3>${element}</h3>
     `;
     document.getElementById("categories").appendChild(div);
   });
 
-  // Funcion agregar al carrito onLoad
-  $("#product-list div div.content a").on("click", function () {
+  // Evento click para agregar productos al carrito
+  $("#product-list").on("click", ".btn", function () {
     let clicked = $(this).closest(".box");
     let id = parseInt(clicked.attr("id"));
     if (isNaN(id)) return;
@@ -159,15 +177,18 @@ window.onload = function () {
       name: producto.name,
       price: Number(producto.price),
       quantity: 1,
-      image: producto.image  // ✅ esto es lo que faltaba
+      image: producto.image,
+      category: producto.category  // 👈 Agregalo así
     };
 
-
     carrito.addToCart(selected);
-    cartLoad();             // 🛒 Actualiza los items del carrito
-    updateCartCount();      // 🔄 Actualiza el número en el icono
+    cartLoad();             // Carga visual del carrito
+    updateCartCount();      // Actualiza el icono del carrito
   });
+
+  updateCartCount(); // Al cargar, mostrar cantidad actual
 };
+
 
 // FIN Funciones onLoad
 
@@ -190,14 +211,32 @@ document.querySelector("#categories").onmouseover = () => {
   }
 };
 
+// ⬆️ Podés ponerla cerca de otras funciones generales
+
+function getIconForCategory(category) {
+  switch (category) {
+    case 'Cervezas': return '🍺';
+    case 'Vinos': return '🍷';
+    case 'Aperitivos': return '🥃';
+    case 'Sin Alcohol': return '🥤';
+    default: return '🧃';
+  }
+}
+
+
 //Envio de msj de whatsapp
 document.querySelector('#place-order').onmouseover = () => {
-  let message = "Hola! Te paso mi pedido:%0A"; // %0A es salto de línea en URL
+  const nombre = document.getElementById('nombre')?.value || "(sin nombre)";
+  const direccion = document.getElementById('direccion')?.value || "(sin dirección)";
+  let message = `Hola! Te paso mi pedido:%0A`;
+  message += `👤 Nombre: ${nombre}%0A📍 Dirección: ${direccion}%0A%0A`;
+
   const orderObj = JSON.parse(sessionStorage.getItem(carrito.cartName)) || [];
 
   orderObj.forEach((element) => {
-    let cantidad = element.quantity || 1;
-    message += `• Producto: ${element.name}%0A  Cantidad: x${cantidad}%0A  Precio: $${(Number(element.price) * cantidad).toFixed(2)}%0A%0A`;
+    let qty = element.quantity || 1;
+    let subtotal = Number(element.price) * qty;
+    message += `${getIconForCategory(element.category)} ${element.name}%0A  Cantidad: x${qty}%0A  Subtotal: $${subtotal}%0A%0A`;
   });
 
   let wappLink = `https://api.whatsapp.com/send?phone=541141755248&text=${message}`;
@@ -225,23 +264,18 @@ $(".products-container .box-container").on(
   }
 );
 
-document.querySelector('#place-order').onmouseover = () => {
-  let message = "Hola! Te paso mi pedido:\n\n";
-  let orderObj = JSON.parse(sessionStorage.getItem(carrito.cartName)) || [];
-
-  orderObj.forEach((element) => {
-    let qty = element.quantity || 1;
-    let subtotal = Number(element.price) * qty;
-    message += `🧃 ${element.name}\nCantidad: x${qty}\nSubtotal: $${subtotal}\n\n`;
-  });
-
-  let wappLink = `https://api.whatsapp.com/send?phone=541141755248&text=${encodeURIComponent(message)}`;
-  document.querySelector('#place-order').setAttribute('href', wappLink);
-};
-
 // Actualiza el contador del carrito al cargar la página
 function updateCartCount() {
-  const cart = JSON.parse(sessionStorage.getItem(carrito.cartName)) || [];
+let stored = sessionStorage.getItem(carrito.cartName);
+let cart = [];
+if (stored && stored.length > 0) {
+  try {
+    cart = JSON.parse(stored);
+  } catch (e) {
+    console.error("Carrito corrupto en sessionStorage:", stored);
+  }
+}
+
   const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
   document.getElementById("cart-count").innerText = totalItems;
 }
@@ -249,40 +283,46 @@ function updateCartCount() {
 // Funcion llenar carrito
 function cartLoad() {
   const container = document.querySelector(".products-container .box-container");
-  container.innerHTML = ""; // limpiamos el contenedor
+  container.innerHTML = "";
 
-  const cartItems = sessionStorage.getItem(carrito.cartName);
-  if (cartItems && cartItems.length > 0) {
-    const cartObj = JSON.parse(cartItems);
+  let stored = sessionStorage.getItem(carrito.cartName);
+  let cartObj = [];
 
-    cartObj.forEach((element, index) => {
-      let quantity = element.quantity || 1;
-      let div = document.createElement("div");
-      div.setAttribute("class", "box");
-
-      div.innerHTML = `
-        <i class="fas fa-times" onclick="removeItem(${index})"></i>
-        <img src="image/${element.image}" alt="${element.name}" class="cart-img">
-        <div class="content">
-          <h3>${element.name}</h3>
-          <div class="quantity-control">
-            <button class="btn-qty" onclick="changeQuantity(${index}, -1)">−</button>
-            <span> x${quantity} </span>
-            <button class="btn-qty" onclick="changeQuantity(${index}, 1)">+</button>
-          </div>
-          <span> Precio: </span>
-        <span class="price"> $${(Number(element.price) * quantity).toFixed(2)} </span>
-        </div>
-      `;
-
-      container.appendChild(div);
-    });
-
-    // Actualiza resumen
-    renderResumen();
+  if (stored && stored.length > 0) {
+    try {
+      cartObj = JSON.parse(stored);
+    } catch (e) {
+      console.error("Error al leer carrito:", stored);
+    }
   }
+
+  cartObj.forEach((element, index) => {
+    let quantity = element.quantity || 1;
+    let div = document.createElement("div");
+    div.setAttribute("class", "box");
+
+    div.innerHTML = `
+      <i class="fas fa-times" onclick="removeItem(${index})"></i>
+      <img src="image/${element.image}" alt="${element.name}" class="cart-img">
+      <div class="content">
+        <h3>${element.name}</h3>
+        <div class="quantity-control">
+          <button class="btn-qty" onclick="changeQuantity(${index}, -1)">−</button>
+          <span> x${quantity} </span>
+          <button class="btn-qty" onclick="changeQuantity(${index}, 1)">+</button>
+        </div>
+        <span> Precio: </span>
+        <span class="price"> $${(Number(element.price) * quantity).toFixed(2)} </span>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+
+  renderResumen();
   updateCartCount();
 }
+
 
 function changeQuantity(index, delta) {
   let cart = JSON.parse(sessionStorage.getItem(carrito.cartName));
@@ -383,3 +423,31 @@ function agregarAlCarrito(producto) {
   updateCartCount();
 }
 
+function enviarPorWhatsApp(event) {
+  event.preventDefault();
+
+  const nombre = document.getElementById('nombre')?.value || "";
+  const telefono = document.getElementById('telefono')?.value || "";
+  const direccion = document.getElementById('direccion')?.value || "";
+  const mensaje = document.getElementById('mensaje')?.value || "";
+
+  if (!nombre || !telefono || !mensaje) {
+    alert("Por favor completá nombre, teléfono y mensaje.");
+    return;
+  }
+
+  const texto = `Hola! 👋%0A
+🧍 Nombre: ${nombre}%0A
+📞 Teléfono: ${telefono}%0A
+🏠 Dirección: ${direccion}%0A
+📝 Mensaje: ${mensaje}`.trim();
+
+  const url = `https://api.whatsapp.com/send?phone=541141755248&text=${encodeURIComponent(texto)}`;
+  window.open(url, "_blank");
+
+  // ✅ Limpia los campos
+  document.getElementById('nombre').value = '';
+  document.getElementById('telefono').value = '';
+  document.getElementById('direccion').value = '';
+  document.getElementById('mensaje').value = '';
+}

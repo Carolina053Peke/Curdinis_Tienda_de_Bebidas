@@ -69,13 +69,24 @@
                 <h3 class="subtotal"> Subtotal: <span>$0</span> </h3>
                 <h3 class="subtotal" id="iva"> IVA: <span>$0</span> </h3>
                 <h3 class="total"> Total: <span>$0</span> </h3>
+                <div class="flex">
+                <div class="inputBox">
+                    <span>Nombre</span>
+                    <input type="text" placeholder="nombre y apellido" id="nombre" required>
+                </div>
+                <div class="inputBox">
+                    <span>Teléfono</span>
+                    <input type="tel" placeholder="tu teléfono" id="telefono" required>
+                </div>
+                </div>
 
+                <div class="inputBox">
+                <span>Domicilio</span>
+                <input type="text" placeholder="tu domicilio" id="direccion">
+                </div>
                 <a href="#" class="btn" id="place-order">realizar pedido</a>
-
             </div>
-
         </div>
-
     </section>
 
     <!-- home section starts  -->
@@ -123,8 +134,8 @@
             <div class="grid">
                 <img src="image/banner-2.png" alt="">
                 <div class="content center">
-                    <span>Llevando +60 piezas</span>
-                    <h3>harumakis de regalo</h3>
+                    <span>Bebidas de Primera linea</span>
+                    <h3>Marcas de primera calidad</h3>
                 </div>
             </div>
             <div class="grid">
@@ -258,8 +269,7 @@
         <div class="inputBox textarea-group">
             <span>Mensaje</span>
             <textarea placeholder="Dejanos el mensaje de tu pedido" id="mensaje" required></textarea>
-
-            <button type="submit" class="btn">Enviar por WhatsApp</button>
+            <button type="submit" class="btn" id="place-order">Contactanos por WhatsApp</button>
         </div>
         <div class="inputBox">
             <span>Ubicación</span>
