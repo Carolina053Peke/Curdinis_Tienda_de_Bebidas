@@ -1,6 +1,6 @@
 // Carga de JSON Productos
 let data = [];
-$.getJSON("/data/productos.json")
+$.getJSON("data/productos.json")
   .done((datos) => {
     data = datos;
   })
