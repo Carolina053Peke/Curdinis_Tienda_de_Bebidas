@@ -1,19 +1,25 @@
 class Cart {
-  constructor(cartName, subtotal, IVA, total) {
+  constructor(cartName) {
     this.cartName = cartName;
-    this.subtotal = subtotal;
-    this.IVA = IVA;
-    this.total = total;
+    this.subtotal = 0;
+    this.total = 0;
     this.items = [];
-    this.init = (function () {
+
+    // Init de sessionStorage (si no existiera)
+    (function (cartName) {
       if (sessionStorage.getItem(cartName) == null) {
         sessionStorage.setItem(cartName, "");
       }
       if (sessionStorage.getItem(cartName + "_total") == null) {
         sessionStorage.setItem(cartName + "_total", 0);
       }
-    })();
+    })(cartName);
   }
+
+  /**
+   * Agrega un item al carrito. Si ya existe, aumenta su quantity en 1.
+   * @param {{ id: number, name: string, price: number, image: string, category: string }} item
+   */
   addToCart(item) {
     let stored = sessionStorage.getItem(this.cartName);
     let existingItems = [];
@@ -26,10 +32,12 @@ class Cart {
       }
     }
 
-    let found = existingItems.find((prod) => prod.id === item.id);
+    const found = existingItems.find((prod) => prod.id === item.id);
     if (found) {
+      // Ya estaba en el carrito: le sumamos 1 a la cantidad
       found.quantity = (found.quantity || 1) + 1;
     } else {
+      // No existía, lo agregamos con quantity = 1
       item.quantity = 1;
       existingItems.push(item);
     }
@@ -37,28 +45,38 @@ class Cart {
     this.items = existingItems;
     sessionStorage.setItem(this.cartName, JSON.stringify(this.items));
   }
-  removeItem(id) {
-    let cartItems = "";
-    let cartObj = [];
-    if (sessionStorage.getItem(this.cartName).length > 0) {
-      let cartItems = sessionStorage.getItem(this.cartName);
-      let cartObj = JSON.parse(cartItems);
 
-      const index = cartObj
-        .map((e) => {
-          return e.id;
-        })
-        .indexOf(id);
-      if (index > -1) {
-        cartObj.splice(index, 1);
-      }
-      this.items = cartObj;
-      let jsonStr = JSON.stringify(this.items);
-      sessionStorage.setItem(this.cartName, jsonStr);
+  /**
+   * Elimina completamente del carrito el producto cuyo id coincide.
+   * @param {number} id
+   */
+  removeItem(id) {
+    const stored = sessionStorage.getItem(this.cartName);
+    if (!stored || stored.length === 0) return;
+
+    let cartObj;
+    try {
+      cartObj = JSON.parse(stored);
+    } catch (e) {
+      console.error("Carrito corrupto al eliminar:", stored);
+      return;
     }
+
+    const index = cartObj.findIndex((e) => e.id === id);
+    if (index > -1) {
+      cartObj.splice(index, 1);
+    }
+
+    this.items = cartObj;
+    sessionStorage.setItem(this.cartName, JSON.stringify(this.items));
   }
+
+  /**
+   * Recalcula subtotal y total (sin IVA), basándose en los precios finales.
+   * Cada producto en this.items debe tener las propiedades { price, quantity }.
+   */
   calculateCart() {
-    let stored = sessionStorage.getItem(this.cartName);
+    const stored = sessionStorage.getItem(this.cartName);
     let cartItems = [];
 
     if (stored && stored.length > 0) {
@@ -70,19 +88,24 @@ class Cart {
     }
 
     this.items = cartItems;
-    let preTotal = 0;
 
-    this.items.forEach(item => {
-      const quantity = item.quantity || 1;
+    // El subtotal es la suma de price * quantity de cada item
+    let sumSub = 0;
+    this.items.forEach((item) => {
       const price = parseFloat(item.price) || 0;
-      preTotal += price * quantity;
+      const qty = item.quantity || 1;
+      sumSub += price * qty;
     });
 
-    this.subtotal = preTotal;
-    this.IVA = parseFloat((this.subtotal * 0.21).toFixed(2));
-    this.total = parseFloat((this.subtotal + this.IVA).toFixed(2));
+    this.subtotal = parseFloat(sumSub.toFixed(2));
+    // No hay cálculo de IVA: total = subtotal directamente
+    this.total = this.subtotal;
+
+    // (Opcional) si querés guardar el total en sessionStorage:
+    sessionStorage.setItem(this.cartName + "_total", this.total);
   }
 }
+
 //Inicializo el carrito
 let carrito = new Cart("cartGenki", 0, 0, 0);
 
@@ -225,7 +248,7 @@ document.querySelector('#place-order').onmouseover = () => {
   orderObj.forEach((element) => {
     let qty = element.quantity || 1;
     let subtotal = Number(element.price) * qty;
-    message += `${getIconForCategory(element.category)} ${element.name}%0A  Cantidad: x${qty}%0A  Subtotal: $${subtotal}%0A%0A`;
+    message += `${getIconForCategory(element.category)} ${element.name}%0A  Cantidad: x${qty}%0A  Total a pagar: $${subtotal}%0A%0A`;
   });
 
   let wappLink = `https://api.whatsapp.com/send?phone=541141755248&text=${message}`;
@@ -343,7 +366,7 @@ function removeItem(index) {
 function renderResumen() {
   carrito.calculateCart();
   document.querySelector(
-    ".cart-total .box .subtotal span"
+    ".cart-total .box .Total span"
   ).innerHTML = `<span>$${carrito.subtotal}</span>`;
 
   document.querySelector("#iva span").innerHTML = `<span>$${carrito.IVA.toFixed(
