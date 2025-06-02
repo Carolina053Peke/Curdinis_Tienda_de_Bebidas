@@ -37,5 +37,5 @@
   { "id": 33, "name": "Baggio Naranja 1L", "price": 1900, "category": "Sin Alcohol", "image": "", "detail": "" },
   { "id": 34, "name": "Cepita Naranja 1L", "price": 1650, "category": "Sin Alcohol", "image": "", "detail": "" },
   { "id": 35, "name": "Speed 473ml", "price": 2100, "category": "Sin Alcohol", "image": "", "detail": "" },
-  { "id": 36, "name": "Speed 250ml", "price": 1500, "category": "Sin Alcohol", "image":"./image/Speed-250ml.webp" , "detail": "" }
+  { "id": 36, "name": "Speed 250ml", "price": 1500, "category": "Sin Alcohol", "image":".Speed-250ml.jpg" , "detail": "" }
 ]
