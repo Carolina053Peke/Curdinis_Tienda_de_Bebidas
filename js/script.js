@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Carga del archivo productos.json y renderizado
 // let data = [];
 
@@ -16,6 +17,17 @@
 //     console.error("Error al cargar productos:", error);
 //   });
 
+=======
+// Carga de JSON Productos
+let data = [];
+$.getJSON("data/productos.json")
+  .done((datos) => {
+    data = datos;
+  })
+  .fail((err) => {
+    console.error("Error al cargar productos.json", err);
+  });
+>>>>>>> fa583395bde62705e920bf3fccd367711d741318
 
 // Definición Clase para carrito y sus metodos
 class Cart {
